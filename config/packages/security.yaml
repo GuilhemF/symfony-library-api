@@ -21,6 +21,7 @@ security:
         main:
             lazy: true
             #provider: users_in_memory
+            stateless: true
             provider: users
             json_login:
                 check_path: /api/login_check

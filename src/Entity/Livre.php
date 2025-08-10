@@ -5,10 +5,19 @@ namespace App\Entity;
 use App\Repository\LivreRepository;
 use Doctrine\DBAL\Types\Types;
 use Doctrine\ORM\Mapping as ORM;
-use ApiPlatform\Metadata\ApiResource;
+use ApiPlatform\Metadata as API;
 
 #[ORM\Entity(repositoryClass: LivreRepository::class)]
-#[ApiResource]
+#[API\ApiResource(
+    operations: [
+        new API\GetCollection(),
+        new API\Get(),
+        new API\Post(security: "is_granted('ROLE_ADMIN')"),
+        new API\Put(security: "is_granted('ROLE_ADMIN')"),
+        new API\Patch(security: "is_granted('ROLE_ADMIN')"),
+        new API\Delete(security: "is_granted('ROLE_ADMIN')"),
+    ]
+)]
 class Livre
 {
     #[ORM\Id]
@@ -22,7 +31,7 @@ class Livre
     #[ORM\Column(type: Types::TEXT)]
     private ?string $description = null;
 
-    #[ORM\Column(length: 255)]
+    #[ORM\Column(length: 255, nullable: true)]
     private ?string $slug = null;
 
     #[ORM\Column(length: 255, nullable: true)]
