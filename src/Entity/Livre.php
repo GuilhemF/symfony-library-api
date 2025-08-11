@@ -3,9 +3,13 @@
 namespace App\Entity;
 
 use App\Repository\LivreRepository;
+use Doctrine\Common\Collections\ArrayCollection;
+use Doctrine\Common\Collections\Collection;
 use Doctrine\DBAL\Types\Types;
 use Doctrine\ORM\Mapping as ORM;
 use ApiPlatform\Metadata as API;
+use ApiPlatform\Doctrine\Orm\Filter\SearchFilter;
+use Symfony\Component\Serializer\Annotation\Groups;
 
 #[ORM\Entity(repositoryClass: LivreRepository::class)]
 #[API\ApiResource(
@@ -16,26 +20,54 @@ use ApiPlatform\Metadata as API;
         new API\Put(security: "is_granted('ROLE_ADMIN')"),
         new API\Patch(security: "is_granted('ROLE_ADMIN')"),
         new API\Delete(security: "is_granted('ROLE_ADMIN')"),
-    ]
+    ],
+    normalizationContext: ['groups' => ['livre:read']],
 )]
+#[API\ApiFilter(SearchFilter::class, properties: [
+    'categories.id' => 'exact',     // ?categories.id=1
+    'categories'    => 'exact',     // ?categories=/api/categories/1
+    'auteur.id'     => 'exact',  
+    'auteur'        => 'exact', 
+])]
 class Livre
 {
     #[ORM\Id]
     #[ORM\GeneratedValue]
     #[ORM\Column]
+    #[Groups(['livre:read'])]
     private ?int $id = null;
 
     #[ORM\Column(length: 255)]
+    #[Groups(['livre:read'])]
     private ?string $titre = null;
 
     #[ORM\Column(type: Types::TEXT)]
+    #[Groups(['livre:read'])]
     private ?string $description = null;
 
     #[ORM\Column(length: 255, nullable: true)]
+    #[Groups(['livre:read'])]
     private ?string $slug = null;
 
     #[ORM\Column(length: 255, nullable: true)]
+    #[Groups(['livre:read'])]
     private ?string $image = null;
+
+    #[ORM\ManyToOne(inversedBy: 'livres')]
+    #[Groups(['livre:read'])]
+    private ?Auteur $auteur = null;
+
+    /**
+     * @var Collection<int, Categorie>
+     */
+    #[ORM\ManyToMany(targetEntity: Categorie::class, inversedBy: 'livres')]
+    #[Groups(['livre:read'])]
+    private Collection $categories;
+
+    public function __construct()
+    {
+        $this->categories = new ArrayCollection();
+    }
 
     public function getId(): ?int
     {
@@ -86,6 +118,42 @@ class Livre
     public function setImage(?string $image): static
     {
         $this->image = $image;
+
+        return $this;
+    }
+
+    public function getAuteur(): ?Auteur
+    {
+        return $this->auteur;
+    }
+
+    public function setAuteur(?Auteur $auteur): static
+    {
+        $this->auteur = $auteur;
+
+        return $this;
+    }
+
+    /**
+     * @return Collection<int, Categorie>
+     */
+    public function getCategories(): Collection
+    {
+        return $this->categories;
+    }
+
+    public function addCategory(Categorie $category): static
+    {
+        if (!$this->categories->contains($category)) {
+            $this->categories->add($category);
+        }
+
+        return $this;
+    }
+
+    public function removeCategory(Categorie $category): static
+    {
+        $this->categories->removeElement($category);
 
         return $this;
     }
