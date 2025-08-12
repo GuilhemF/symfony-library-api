@@ -1,6 +1,6 @@
 # Symfony Library API
 
-Bienvenue sur le dépôt de notre application Symfony avec API Platform. Ce document vous guidera pour lancer le projet en local.
+Bienvenue sur le dépôt de notre application [Symfony 7.3](https://symfony.com/) avec [API Platform 4.1](https://api-platform.com/docs/symfony/). Ce document vous guidera pour lancer le projet en local.
 
 ## Installation
 
