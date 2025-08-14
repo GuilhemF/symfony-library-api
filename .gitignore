@@ -7,7 +7,7 @@
 /public/bundles/
 /var/
 /vendor/
-/migrations/
+
 ###< symfony/framework-bundle ###
 
 ## Windows
@@ -18,5 +18,5 @@ Thumbs.db
 .DS_Store
 
 ###> lexik/jwt-authentication-bundle ###
-#/config/jwt/*.pem
+/config/jwt/*.pem
 ###< lexik/jwt-authentication-bundle ###
