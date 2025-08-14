@@ -5,13 +5,14 @@ Bienvenue sur le dépôt de notre application [Symfony 7.3](https://symfony.com/
 ## Prérequis
 
 PHP 8.4.7
+[Symfony CLI](https://symfony.com/download) 
 
 ## Installation
 
 1.  **Clonez le dépôt** :
 
     ```bash
-    git clone [https://github.com/GuilhemF/symfony-library-api.git](https://github.com/GuilhemF/symfony-library-api.git) votre-depot
+    git clone https://github.com/GuilhemF/symfony-library-api.git votre-depot
     cd votre-depot
     ```
 
